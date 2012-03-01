@@ -1,3 +1,5 @@
+# configure this file and save it as database.yml
+
 # MySQL. Versions 4.1 and 5.0 are recommended.
 #
 # Install the MySQL driver:
@@ -17,7 +19,7 @@ mysql_username = ENV['MX_MYSQL_USERNAME'] || 'mx'
 mysql_socket =
   [ "/var/run/mysqld/mysqld.sock",
     "/tmp/mysql.sock",
-    "/var/mysql/mysql.sock"
+    "/var/mysql/mysql.sock",
   ].detect {|socket_path| File.exists?(socket_path)}
 if !mysql_socket
   puts "*"*80

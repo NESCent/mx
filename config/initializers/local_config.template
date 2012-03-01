@@ -1,5 +1,5 @@
 
-# Configure this file and rename it local_config.rb.
+# Configure this file and save it as local_config.rb.
 
 # Set your local ip/server root here, if you are only running in test
 # or development mode this doesn't need to be set
