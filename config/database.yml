@@ -12,21 +12,21 @@
 # Some code to let the local environment override the default database options
 mysql_password = ENV['MX_MYSQL_PASSWORD'] || 'MmmXxx'
 mysql_username = ENV['MX_MYSQL_USERNAME'] || 'mx'
-
-# Loop over all these possible mysql sockets, and see if they
-mysql_socket =
-  [ "/var/run/mysqld/mysqld.sock",
-    "/tmp/mysql.sock",
-    "/var/mysql/mysql.sock"
-  ].detect {|socket_path| File.exists?(socket_path)}
-if !mysql_socket
-  puts "*"*80
-  puts "*"*80
-  puts "Can't locate mysql socket file. Is MySQL correctly installed?"
-  puts "*"*80
-  puts "*"*80
-end
 %>
+# Loop over all these possible mysql sockets, and see if they
+# mysql_socket = nil
+  # [ "/var/run/mysqld/mysqld.sock",
+    # "/tmp/mysql.sock",
+    # "/var/mysql/mysql.sock"
+  # ].detect {|socket_path| File.exists?(socket_path)}
+# if !mysql_socket
+  # puts "*"*80
+  # puts "*"*80
+  # puts "Can't locate mysql socket file. Is MySQL correctly installed?"
+  # puts "*"*80
+  # puts "*"*80
+# end
+
 
 production: &production
   adapter: mysql2
@@ -36,12 +36,13 @@ production: &production
   pool: 5
   username: <%= mysql_username %>
   password: <%= mysql_password %>
-  <% if mysql_socket %>
-  socket: <%= mysql_socket %>
-  <% else %>
-  host: db-dev
+  <% #if mysql_socket %>
+#  socket: <%#= mysql_socket %>
+  <%# else %>
+  host: localhost
+#  host: db-dev.nescent.org
   port: 3306
-  <% end %>
+  <%# end %>
 
 development:
   <<: *production

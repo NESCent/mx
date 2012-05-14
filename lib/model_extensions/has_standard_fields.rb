@@ -50,7 +50,7 @@ module HasStandardFields
           end
 
           def set_updator
-            self[:updator_id] = $person_id if self.respond_to?(:updator_id) && (self.new_record? ? self.updator_id.blank? : true)
+            self[:updator_id] = $person_id if self.respond_to?(:updator_id) && self.updator_id.blank? # tweaked - don't override if given (script load)
           end
 
           #== PROJECT SECURITY CALLBACKS

@@ -3,8 +3,8 @@
 
 # Set your local ip/server root here, if you are only running in test
 # or development mode this doesn't need to be set
-HOME_SERVER = 'foo.bar.com'
-MAIL_SERVER = 'foo.bar.com'
+HOME_SERVER = 'mx-dev.nescent.org'
+MAIL_SERVER = 'localhost'
 HELP_WIKI = 'mx.phenomix.org'
 
 # Supply the path to ImageMagik's 'identify' and 'convert' binaries

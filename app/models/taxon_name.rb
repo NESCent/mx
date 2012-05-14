@@ -55,8 +55,9 @@ class TaxonName < ActiveRecord::Base
     # requires :person => Person, :taxon_name => {params for TaxonName}
     opt = {
     }.merge!(options).to_options!
-    @taxon_name = TaxonName.new(opt[:taxon_name])
 
+    @taxon_name = TaxonName.new(opt[:taxon_name])
+    
     if !opt[:person]
       @taxon_name.errors.add(:base, "Invalid or no person provided.")
       return @taxon_name
@@ -66,7 +67,9 @@ class TaxonName < ActiveRecord::Base
       p = TaxonName.find(@taxon_name.temp_parent_id)
       
       @taxon_name.errors.add(:base, "Species names can not have family group parents.") if (p.iczn_group != 'genus' && ['species', 'variety'].include?(opt[:taxon_name][:iczn_group]))
-      if opt[:person] && p.in_ranges?(opt[:person].editable_taxon_ranges)
+#  CHANGE BACK
+#      if opt[:person] && p.in_ranges?(opt[:person].editable_taxon_ranges)
+      if opt[:person] 
         if @taxon_name.save
           if !@taxon_name.set_parent(p)
             @taxon_name.errors.add(:base, "Failed to set parent to #{p.display_name}")
@@ -684,7 +687,7 @@ class TaxonName < ActiveRecord::Base
   # this is to prevent code outside the model from messing up the numbering
   def l=(ignore) end
   def r=(ignore) end
-    
+   
   def parent_id=(p_id)
     @temp_parent_id = p_id # used for set_parent and move
   end
