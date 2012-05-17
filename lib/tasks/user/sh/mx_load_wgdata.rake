@@ -69,7 +69,7 @@ namespace :mx do
     end
     puts "getting the file"
     wgfile= CSV.read(@file, :headers => true, :encoding => 'windows-1251:utf-8')
-
+# 
     # begin
      # ActiveRecord::Base.transaction do 
 
@@ -89,7 +89,7 @@ namespace :mx do
       @namespace.save
       @project = Proj.find_or_create_by_name(:name => @project_name, :starting_tab => @starting_tab, :hidden_tabs => @hidden_tabs, :creator_id => @admin.id, :updator_id => @admin.id)
       @project.people << @admin
-      @project.save 
+      @project.save!
       $proj_id = @project.id
       #puts "projectid: "+@project.id.to_s
       @matrix = Mx.find_or_create_by_name(:name => @matrix_name, :creator_id => @admin.id, :updator_id => @admin.id)
@@ -100,13 +100,14 @@ namespace :mx do
       @chargroup.save
       @taxonroot = TaxonName.create_new(:taxon_name => {:name => 'RootTest', :parent_id => @taxonid, :iczn_group => 'n/a', :creator_id => @admin.id, :updator_id => @admin.id})        
       @taxonroot.save!
+      @taxonroot.projs << @project
       @taxons['RootTest'] = @taxonroot.id
-  #    @taxonroot.set_visibility(:proj_id => @projid)  
       @taxonid = @taxonroot.id
       puts "@taxonid:  "+@taxonid.to_s+"   @taxonroot.id: "+@taxonroot.id.to_s
     end
     
     # generate headers for chars and refs, and create characters and states
+    puts "generate headers"
     generate_headers
 
     # for each row
@@ -341,7 +342,7 @@ namespace :mx do
     # create the characters and states from header row add to chargroup
     #puts "generating headers"
     headers.each do |header|
-    #  puts "header: "+header
+      puts "header: "+header
       if header == @char_end
         @charFlag = 0
         @dataFlag = 0
