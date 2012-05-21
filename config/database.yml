@@ -39,8 +39,8 @@ production: &production
   <% #if mysql_socket %>
 #  socket: <%#= mysql_socket %>
   <%# else %>
-#  host: localhost
-  host: db-dev.nescent.org
+  host: localhost
+#  host: db-dev.nescent.org
   port: 3306
   <%# end %>
 
