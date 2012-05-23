@@ -258,10 +258,12 @@ class ChrsController < ApplicationController
       @cs2 = ChrState.find_by_chr_id_and_state(@chr.id, @s2)
 
       # make an array of old OTUs that had a coding for this character (scope update)
-      @otus = Coding.find_by_sql(["SELECT DISTINCT otu_id FROM Codings WHERE ((chr_id = ?) and (proj_id = ?)  and ( (chr_state_id = ?) or (chr_state_id = ?) ) );", @chr.id, @proj.id, @cs1.id, @cs2.id])
+#      @otus = Coding.find_by_sql(["SELECT DISTINCT otu_id FROM Codings WHERE ((chr_id = ?) and (proj_id = ?)  and ( (chr_state_id = ?) or (chr_state_id = ?) ) );", @chr.id, @proj.id, @cs1.id, @cs2.id])
+      @otus = Coding.where("((chr_id = ?) and (proj_id = ?)  and ( (chr_state_id = ?) or (chr_state_id = ?) ) )", @chr.id, @proj.id, @cs1.id, @cs2.id).uniq
 
       # delete the old codings if they exist (scope update again)
-      @old_codings = Coding.find_by_sql(["SELECT id, otu_id, chr_id, chr_state_id, proj_id FROM Codings WHERE ((chr_id = ?) and (proj_id = ?) and ( (chr_state_id = ?) or (chr_state_id = ?) ) );", @chr.id, @proj.id, @cs1.id, @cs2.id])
+#      @old_codings = Coding.find_by_sql(["SELECT id, otu_id, chr_id, chr_state_id, proj_id FROM Codings WHERE ((chr_id = ?) and (proj_id = ?) and ( (chr_state_id = ?) or (chr_state_id = ?) ) );", @chr.id, @proj.id, @cs1.id, @cs2.id])
+      @old_codings = Coding.where("((chr_id = ?) and (proj_id = ?) and ( (chr_state_id = ?) or (chr_state_id = ?) ) )", @chr.id, @proj.id, @cs1.id, @cs2.id)
       for coding in @old_codings
         Coding.find(coding.id).destroy
       end
