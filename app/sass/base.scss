@@ -307,7 +307,7 @@ tr.stripe {background-color: #efefef;}
 
 /*** PAGE STRUCTURE ***/
 /* layout for private pages */
-#container { border: 1px solid #ccc; background: #fff; }
+#container { border: 1px solid #ccc; background: #fff; display:block; max-width:100%}
 
 #header { background: rgb(247, 251, 255);
     border: 0 none silver;
