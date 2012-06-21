@@ -31,6 +31,7 @@ class Confidence < ActiveRecord::Base
   has_many :codings, :dependent => :nullify
   has_many :pcrs, :dependent => :nullify
   has_many :ces, :foreign_key => 'locality_accuracy_confidence_id'
+  has_many :specimen_determinations, :dependent => :nullify
 
   belongs_to :proj
   validates_presence_of :name
@@ -40,23 +41,24 @@ class Confidence < ActiveRecord::Base
 
   # prefix a confidence like Foo: some confidence to make it applicable to objects of a given type
   scope :by_namespace, lambda {|*args| {:conditions => ["name like ?", (args.first ? "#{args.first.to_s.downcase}:%" : -1) ]}}  # TO BE DEPRECATED FOR BELOW
-
   scope :by_model, lambda {|*args| {:conditions => ["confidences.applicable_model = ?", (args.first ? args.first : -1) ]}}
 
   def display_name(options = {})
      @opt = {
       :type => :list # :list, :head, :select, :sub_select
      }.merge!(options.symbolize_keys)
+     str = ''
      case @opt[:type]
      when :selected
-        name
+       str = name
      when :for_select_list
-        name
+       str =  name
      when :short
-       open_background_color_span + short_name + '</span>'
+       str = open_background_color_span + short_name + '</span>'
      else
-       open_background_color_span + name + '</span>'
+       str = open_background_color_span + name + '</span>'
      end
+     str.html_safe
   end
 
   # TODO: move to helper

@@ -58,7 +58,7 @@ class OtuGroupsController < ApplicationController
   def show_descriptions
     id = params[:otu_group][:id] if params[:otu_group]
     id ||= params[:id]
-    @otu_group = OtuGroup.find(id, :include => :otus)
+    @otu_group = OtuGroup.find(id)
     @templates = @proj.content_templates
 
     respond_to do |wants|
@@ -173,7 +173,7 @@ class OtuGroupsController < ApplicationController
     OtuGroupsOtu.find(:all, :conditions => {:otu_group_id => params[:id]}, :order => "otus.#{params[:sort_by].gsub(/\s/,"_")}", :include => :otu).each_with_index do |o, i|
       o.update_attribute(:position, i)
     end
-    flash[:notice] = "Sorted by #{params[:sort_by]}."
+    notice "Sorted by #{params[:sort_by]}."
     redirect_to :action => :show, :id => params[:id]
   end
 
@@ -193,17 +193,17 @@ class OtuGroupsController < ApplicationController
 
   def edit_multiple_content
     if not (params[:content_type] && params[:content_type][:id].to_i > 0)
-      flash[:notice] = "Pick a content type first."
-      redirect_to :action => 'show', :id => params[:otu_group_id]  and return
+      warning "Pick a content type first."
+      redirect_to :action => 'show', :id => params[:otu_group][:id]  and return
     end
 
-    @otu_group = OtuGroup.find(params[:otu_group_id], :include => :otus)
+    @otu_group = OtuGroup.find(params[:otu_group][:id], :include => :otus)
     @otus = @otu_group.otus
     @content_type = ContentType.find(params[:content_type][:id])
     @otu_cons = @content_type.contents(:proj_id => @proj.id)
 
     if params['submit'] == 'show'
-      @show = ['show_multiple_content']
+      @show = ['multiple_content']
     else
       @show = ['edit_multiple_content']
     end

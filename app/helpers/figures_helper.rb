@@ -1,6 +1,8 @@
 # encoding: utf-8
 module FiguresHelper
-
+  def figure_marker_id(fm)
+    "figure_marker_#{fm.id}"
+  end
   def figure_class(figure)
     "figure-class-#{figure.id}"
   end
@@ -118,7 +120,7 @@ module FiguresHelper
 
   # TODO mx3: deprecate
   def fig_link(o)
-    'DEPRECATED FOR figure_tag' #    render(:partial => "figure/fig_link", :locals => { :fig_obj_id => o.id, :fig_obj_class => o.class.to_s, :msg => ''})
+    'DEPRECATED FOR illustrate_tag' #    render(:partial => "figure/fig_link", :locals => { :fig_obj_id => o.id, :fig_obj_class => o.class.to_s, :msg => ''})
   end
 
   # Pass an Instance of a Model that has include ModelExtensions::Figurable
