@@ -357,15 +357,12 @@ class Mx < ActiveRecord::Base
 
     # three dimensional array
     grid = Array.new(chrs.size){Array.new(otus.size){Array.new}}
-    
-    chrs.each do |chr|
-      Coding.in_matrix(self).by_chr(chr).each do |c|
-        if otus.index(c.otu_id)
-          grid[chrs.index(c.chr_id)][otus.index(c.otu_id)].push(c) 
-        end
-      end
+   
+    # find/sort all the codings
+    Coding.where(:chr_id => chrs, :otu_id => otus).each do |c|
+      grid[chrs.index(c.chr_id)][otus.index(c.otu_id)].push(c)
     end
-    
+   
     {:grid => grid, :chrs => @c, :otus => @o }
   end
 
@@ -459,7 +456,7 @@ class Mx < ActiveRecord::Base
     sql = "codings.chr_state_id IN (#{ids.join(",")})" # ids.inject([]){|sum, o| sum << "codings.chr_state_id = #{o}"}.join(' OR ')   # chr state conditions
     sql1 = "codings.otu_id IN (#{otus.map(&:id).join(",")})" # otus.inject([]){|sum, o| sum << "codings.otu_id = #{o.id}"}.join(' OR ')    # otus conditions
     
-    found = Otu.find(:all, :include => [:codings], :conditions => "(#{sql}) AND (#{sql1})")   
+    found = Otu.find(:all, :conditions => "(#{sql}) AND (#{sql1})")   
 
     if invert == true
       return otus - found
@@ -584,11 +581,11 @@ class Mx < ActiveRecord::Base
   # returns a hash of hashes with the key a Character.id, and the value the percentage of states that character is coded for
   def percent_coded_by_chr
     h = {}
-    otu_ids = self.otus.collect{|o| o.id}
     tot = self.otus.count
+    otu_ids = self.otus.collect{|o| o.id}.join(",")
     for c in self.chrs
-      h[c.id] = (tot == 0 ? 0 : (Otu.where(:id => Coding.where(:chr_id => c, :otu_id => otu_ids).collect{|i| i.otu_id})
-.count.to_f / tot.to_f))
+      v = Coding.find_by_sql("SELECT count(distinct otu_id) as c FROM `codings` WHERE `codings`.`chr_id` = #{c.id} AND `codings`.`otu_id` IN (#{otu_ids});")
+      h[c.id] = v.first[:c].to_f / tot.to_f
     end
     h
   end
@@ -597,8 +594,10 @@ class Mx < ActiveRecord::Base
   def percent_coded_by_otu
     h = {}
     tot = self.chrs.count
+    chr_ids = self.chrs.collect{|c| c.id}.join(",")
     for o in self.otus
-      h[o.id] = (tot == 0 ? 0 : ( self.chrs_coded_by_otu_id(o.id).size.to_f / tot.to_f))
+      v = Coding.find_by_sql("SELECT count(distinct chr_id) as c FROM `codings` WHERE `codings`.`otu_id` = #{o.id} AND `codings`.`chr_id` IN (#{chr_ids});")
+      h[o.id] = v.first[:c].to_f / tot.to_f 
     end
     h
   end
@@ -656,7 +655,7 @@ class Mx < ActiveRecord::Base
                 c.save!
                 break
               else # !checked & !clicked & continuous_state.blank? (destroy when present)
-                if params[:codings][k][:id]
+                if !params[:codings][k][:id].blank? #!!
                   c = Coding.find(params[:codings][k][:id])
                   c.destroy
                 end
