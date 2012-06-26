@@ -43,7 +43,11 @@ source :gemcutter
   #   gem 'prototype_legacy_helper', '0.0.0', :git => 'git://github.com/rails/prototype_legacy_helper.git'
 
 group :production do
+
+  gem 'newrelic_rpm'
 end
+
+
 
 group :development do
   gem "rails-footnotes"
