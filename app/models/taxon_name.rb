@@ -66,7 +66,9 @@ class TaxonName < ActiveRecord::Base
       p = TaxonName.find(@taxon_name.temp_parent_id)
       
       @taxon_name.errors.add(:base, "Species names can not have family group parents.") if (p.iczn_group != 'genus' && ['species', 'variety'].include?(opt[:taxon_name][:iczn_group]))
-      if opt[:person] && p.in_ranges?(opt[:person].editable_taxon_ranges)
+# CHANGE BACK
+#     if opt[:person] && p.in_ranges?(opt[:person].editable_taxon_ranges)
+     if opt[:person]
         if @taxon_name.save
           if !@taxon_name.set_parent(p)
             @taxon_name.errors.add(:base, "Failed to set parent to #{p.display_name}")
