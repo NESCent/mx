@@ -1,9 +1,10 @@
 # mx specific "secret" files
 # When we get to github these files need to be .templated, included in development by code,  and ignored
-config/*.yml # (template database.yml)
-config/initializer/local_config.rb
+config/*.yml
+config/initializers/local_config.rb
 app/controllers/public/site/**/*
 app/views/public/site/**/*
+Gemfile.lock
 
 # mx specific ignores
 /public/generated/
