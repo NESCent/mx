@@ -6,11 +6,15 @@ app/controllers/public/site/**/*
 app/views/public/site/**/*
 Gemfile.lock
 
+# no committing data files
+*.csv
+ 
 # mx specific ignores
 /public/generated/
 /db/dumps/*
 /db/schema.rb
 
+# no committing data dumps
 *.sql
 /public/files/*
 
