@@ -23,6 +23,9 @@ Edge::Application.routes.draw do
  get  "/account/reset_password_response/:token_key" => "account#respond_reset_password", :as => :respond_reset_password
  post "/account/reset_password_response/:token_key" => "account#do_respond_reset_password"
 
+ get "/account/signup" => "account#signup", :as => :account_signup
+ post "/account/signup" => "account#signup"
+
  get "/people/preferences" => "people#preferences", :as => :preferences
  post "/people/preferences" => "people#update"
 
