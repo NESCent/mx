@@ -46,7 +46,7 @@ class Otu < ActiveRecord::Base
   # TODO: Resolve _with_ vs. _by_, with should be present _by_ should be search?
   scope :with_taxon_name, lambda {|*args| {:conditions => ['otus.taxon_name_id = ?', (args.first || -1)]}}
   scope :with_taxon_name_populated, :conditions => 'otus.taxon_name_id IS NOT NULL'
-	scope :within_mx_range, lambda {|*args| where("mxes_otus.position >= ?", (args.first || -1)).where("mxes_otus.position <= ?", (args[1] || -1)) }
+	scope :within_mx_range, lambda {|*args| includes(:mxes_otus).where("mxes_otus.position >= ?", (args.first || -1)).where("mxes_otus.position <= ?", (args[1] || -1)) }
   scope :with_seqs_not_through_specimens, lambda {|*args| {:include => :seqs, :conditions => "otus.id IN (SELECT otu_id from seqs)"}}
 
   # use in_proj from /lib/default_named_scopes
