@@ -514,6 +514,29 @@ class MxesController < ApplicationController
     render :template => 'mxes/browse/browse'
   end
 
+	def browse_simple
+		# Identify the mx
+		# template needs to display a table of CHRxOTU
+		# and each cell is a coding
+		t0 = Time.now
+		logger.info("Getting id")
+		mx_id = params[:id]
+		t1 = Time.now
+		logger.info("#{(t1 - t0) * 1000}ms: getting ID from params")
+		t0 = Time.now
+		logger.info("finding matrix")
+		matrix = Mx.find(mx_id)
+		t1 = Time.now
+		logger.info("#{(t1 - t0) * 1000}ms: found matrix")
+		#@total_chrs = 0
+		#@total_otus = 0
+    @total_chrs = matrix.chrs.count
+    @total_otus = matrix.otus.count
+		t1 = Time.now
+		logger.info("#{(t1 - t0) * 1000}ms: set totals")
+		@codings = matrix.codings
+		render :template => 'mxes/browse_simple'
+	end
 
   def owl_export
     matrix = Mx.find(params[:id])

@@ -464,6 +464,7 @@ Edge::Application.routes.draw do
     get show_unused_character_states
     get simple_format
     get test
+    get browse_simple
     post add_chr
     post add_otu
     post clone
