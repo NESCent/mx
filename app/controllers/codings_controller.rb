@@ -14,6 +14,13 @@ class CodingsController < ApplicationController
       wants.html {}
     end
   end
+  
+  # dleehr
+  def list
+  	# list codings with the specified otu_id and chr_id
+  	@codings = Coding.by_chr(params[:chr_id]).by_otu(params[:otu_id])
+  	render :template => 'codings/list', :layout => 'minimal'
+  end
 
 #  Individual codings, i.e. from one-click should hit the standard fields
 # def create
