@@ -48,6 +48,8 @@ javascripts:
     - public/javascripts/rails.js
     - public/colorpicker/js/colorpicker.js
     - public/javascripts/jquery.ba-throttle-debounce.js
+  bootstrap:
+    - public/javascripts/bootstrap/js/bootstrap.js
 
 stylesheets:
   application:
@@ -55,3 +57,5 @@ stylesheets:
     - public/stylesheets/notifications.css
     - public/colorpicker/css/colorpicker.css
     - public/generated/*.css
+  bootstrap:
+    - public/stylesheets/bootstrap/css/bootstrap.css
