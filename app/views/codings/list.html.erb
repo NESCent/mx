@@ -1,0 +1,7 @@
+<!-- found a comment in _standard_form_fields indicating Codings in @codings map 1:1 with chr_state ids, in order -->
+
+<ol>
+<% @codings.each_with_index do |coding, i| %>
+	<li><%= coding.chr_state_name %></li>
+<% end %>
+</ol>
