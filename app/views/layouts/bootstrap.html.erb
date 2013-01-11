@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>MX - <%=  self.controller.controller_name.pluralize.gsub("_", " ") %></title>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+  <%= include_javascripts :bootstrap %>
+  <%= include_stylesheets :bootstrap %>
+  <%= yield :head -%>
+  </head>
+<body>
+	<%= yield -%>
+</body>
+</html>
