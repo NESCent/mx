@@ -45,3 +45,5 @@ Icon?
 /vendor/bundle
 /log/*
 /tmp/*
+
+config/database.yml
