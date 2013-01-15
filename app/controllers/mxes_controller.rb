@@ -518,23 +518,16 @@ class MxesController < ApplicationController
 		# Identify the mx
 		# template needs to display a table of CHRxOTU
 		# and each cell is a list of codings
-		t0 = Time.now
-		logger.info("Getting id")
-		mx_id = params[:id]
-		t1 = Time.now
-		logger.info("#{(t1 - t0) * 1000}ms: getting ID from params")
-		t0 = Time.now
-		logger.info("finding matrix")
-		matrix = Mx.find(mx_id)
-		t1 = Time.now
-		logger.info("#{(t1 - t0) * 1000}ms: found matrix")
-    @total_chrs = matrix.chrs.count
-    @total_otus = matrix.otus.count
-    @chrs = matrix.chrs # these are both ordered
-    @otus = matrix.otus
-		t1 = Time.now
-		logger.info("#{(t1 - t0) * 1000}ms: set totals")
-		@codings = matrix.codings_in_grid # organize coding lists into a 2D array 
+		mx_id = params[:mx_id] || params[:id]
+#		mx_id = params[:id]
+		puts "mx_id is #{mx_id}"
+		@matrix = Mx.find(mx_id)
+    @total_chrs = @matrix.chrs.count
+    @total_otus = @matrix.otus.count
+    @chrs = @matrix.chrs # these are both ordered
+    @otus = @matrix.otus
+		@codings = @matrix.codings_in_grid # organize coding lists into a 2D array
+		@mxes = Mx.by_proj(@proj).order("name") # for select list
 		render :template => 'mxes/browse_simple', :layout => 'bootstrap'
 	end
 

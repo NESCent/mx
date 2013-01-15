@@ -9,30 +9,58 @@
 
 <div style="margin: 5%">
 	<div class="row">
-		<table class="table table-striped table-condensed">
-			<thead><tr><th>&nbsp;</th><% @codings[:chrs].each do |chr| -%><th class="chr_name"><%= chr.short_name %></th><% end -%></tr></thead>
-			<tbody>
-			<% @codings[:grid].transpose.each_with_index do |chr_codings, i| %>
-			<tr>
-				<td class="otu_name"><%= @codings[:otus][i].name %></td>
-				<% chr_codings.each_with_index do |coding_array, j| %>
-				<td>
-					<% if coding_array.empty? %>
-							0
-						<% else %>
-							<a href="#" 
-							   class="coding_popover" 
-							   rel="popover"
-							   data-content="<ol><% coding_array.each do |coding| -%><li><%= coding.chr_state_name %> <%= coding.ref.cached_display_name unless coding.ref.nil? %></li><% end %></ol>"
-							   data-original-title="<%= coding_array.first.chr.name -%>">
-							   <%= coding_array.count.to_s -%>
-							   </a>
+	<!-- m.name, :action => :show, :id => m.id), -->
+		<%= form_tag '#browse_simple', { :class => 'form-inline pull-right' } do %>
+			<!-- helperize this -->
+			<%= label_tag(:mx_id, "Select a Matrix:") %>
+			<%= select_tag(:mx_id, options_from_collection_for_select(@mxes, "id", "name", @matrix.id)) %>
+			<%= submit_tag("Go", :class=> 'btn btn-primary') %>
+		<% end %>
+		<!--	
+		<%= form_for @matrix do |mx| %>
+			<%= mx.select(:id,  options_from_collection_for_select(@mxes, "id", "name")) %> 
+			<%= submit_tag "Go", :class => 'btn btn-primary' %>
+		<% end %>
+		-->
+	</div>
+	<div class="row">
+		<% if @codings %>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<% @codings[:chrs].each do |chr| -%>
+							<th class="chr_name">
+								<abbr title="<%= chr.name %>"><%= chr.short_name %></abbr>
+							</th>
+						<% end -%>
+					</tr>
+					</thead>
+				<tbody>
+				<% @codings[:grid].transpose.each_with_index do |chr_codings, i| %>
+				<tr>
+					<td class="otu_name"><%= @codings[:otus][i].name %></td>
+					<% chr_codings.each_with_index do |coding_array, j| %>
+					<td>
+						<% if coding_array.empty? %>
+								<span class="muted">0</span>
+							<% else %>
+								<a href="#" 
+									 class="coding_popover " 
+									 rel="popover"
+									 data-content="<ol><% coding_array.each do |coding| -%><li><%= coding.chr_state_name %> <%= coding.ref.cached_display_name unless coding.ref.nil? %></li><% end %></ol>"
+									 data-original-title="<%= coding_array.first.chr.name -%>">
+									 <%= coding_array.count.to_s -%>
+									 </a>
+						<% end %>
 					<% end %>
+				</tr>
 				<% end %>
-			</tr>
-			<% end %>
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		<% else %>
+			<div class="alert">This matrix has no codings.</div>
+		<% end %>
 	</div>
 </div>
 
