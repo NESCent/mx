@@ -1,27 +1,30 @@
 <style type="text/css">
-	td.otu_name { 
+	td.otu_name, th.otu_name { 
 		text-align: right;	
 	}
 	.popover-title {
 		font-weight: bold;
 	}
+	th.chr_name {
+		font-weight: normal;
+	}
+	th.character {
+		text-align: center;
+	}
 </style>
 
 <div style="margin: 5%">
 	<div class="row">
-	<!-- m.name, :action => :show, :id => m.id), -->
-		<%= form_tag '#browse_simple', { :class => 'form-inline pull-right' } do %>
-			<!-- helperize this -->
-			<%= label_tag(:mx_id, "Select a Matrix:") %>
-			<%= select_tag(:mx_id, options_from_collection_for_select(@mxes, "id", "name", @matrix.id)) %>
-			<%= submit_tag("Go", :class=> 'btn btn-primary') %>
-		<% end %>
-		<!--	
-		<%= form_for @matrix do |mx| %>
-			<%= mx.select(:id,  options_from_collection_for_select(@mxes, "id", "name")) %> 
-			<%= submit_tag "Go", :class => 'btn btn-primary' %>
-		<% end %>
-		-->
+		<div class="pull-left"><strong>Browsing Matrix: <%= @matrix.name -%></strong></div>
+		<div class="pull-right">
+		<!-- forms always have a 20px bottom margin? -->
+			<%= form_tag '#browse_simple', { :class => 'form form-inline' } do -%>
+				<!-- helperize this -->
+				<%= label_tag(:mx_id, "Select a Matrix:") -%>
+				<%= select_tag(:mx_id, options_from_collection_for_select(@mxes, "id", "name", @matrix.id)) -%>
+				<%= submit_tag("Go", { :class=> 'btn'}) -%>
+			<% end %>
+		</div>
 	</div>
 	<div class="row">
 		<% if @codings %>
@@ -29,9 +32,13 @@
 				<thead>
 					<tr>
 						<th>&nbsp;</th>
+						<th class="character" colspan="<%= @total_chrs %>">Characters (<%= @total_chrs %>)</th>
+					</tr>
+					<tr>
+						<th class="otu_name">OTUs (<%= @total_otus %>)</th>
 						<% @codings[:chrs].each do |chr| -%>
 							<th class="chr_name">
-								<abbr title="<%= chr.name %>"><%= chr.short_name %></abbr>
+								<span rel="tooltip" class="chr_name" title="<%= chr.name %>"> <%= chr.short_name %></span>
 							</th>
 						<% end -%>
 					</tr>
@@ -66,4 +73,5 @@
 
 <script>
 	$('.coding_popover').popover({trigger: 'hover', html: true, placement: 'bottom', delay: {hide: 100} });
+	$('.chr_name').tooltip();
 </script>
