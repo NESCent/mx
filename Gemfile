@@ -6,7 +6,7 @@
 
 source :gemcutter
   # bundler requires these gems in all environments
-  gem "rails", "3.0.19"
+  gem "rails", "3.0.20"
   gem "RedCloth"
   gem "bio",  '1.4.1'
   gem "mysql2", '< 0.3'
