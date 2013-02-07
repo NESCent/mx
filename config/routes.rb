@@ -1015,6 +1015,14 @@ Edge::Application.routes.draw do
   },
   },
 
+ 'search' => {
+    members: %w{},
+    collections: %w{
+      get index
+      get search_form
+    },
+ },
+
   'sensus' => {
     members: %w{},
     collections: %w{
