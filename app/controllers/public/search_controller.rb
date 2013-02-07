@@ -15,13 +15,17 @@ class Public::SearchController < ApplicationController
     @taxa = {}
     # filter these through selections or make it ajaxy
     # Higher taxonomic group
-    @taxa[:htg] = [["Higher Taxonomy", 0], ["Angiosperms", 1]]
+    @taxa[:htg] = []
     # Order
-    @taxa[:order] = [["Order", 0]]
+    @taxa[:order] = TaxonName.where(:iczn_group => 'order') || []
     # Family
-    @taxa[:family] = [["Family", 0]]
+    @taxa[:family] = TaxonName.where(:iczn_group => 'family') || []
     # Genus
-    @taxa[:genus] = [["Genus", 0]]
+    if params[:selected_family].nil?
+      @taxa[:genus] = []
+    else
+      @taxa[:genus] = TaxonName.where(:iczn_group => 'genus', :parent => params[:selected_family]) || []
+    end
     # we need character groups (traits)
     @trait_groups = [["Trait Group", 0], ["Group 1", 1], ["Group 2", 2]]
     @trait_names = [["Trait Name", 0], ["gametophytic chromosome number (minimum)", 1], ["gametophytic chromosome number (mean)", 2]]

@@ -44,8 +44,24 @@ function addButtonHandlers() {
   });
 }
 
+function familyChanged(element, familyId) {
+  console.log("family changed to " + familyId)
+  $.ajax({
+    // good candidate for the erb
+    url: "/projects/1/public/search/search_form",
+    data: { family_id: familyId }
+    }).done(function(data, textStatus, jqXHR) { console.log(data)});
+}
+
+function addSelectionChangeListeners() {
+  $('select#family').bind('change',function() {
+    familyChanged(this,this.value);
+  });
+}
+
 $(document).ready(function() {
   // add button handlers
   addButtonHandlers();
+  addSelectionChangeListeners();
 });
 

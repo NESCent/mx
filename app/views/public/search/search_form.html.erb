@@ -17,7 +17,7 @@
             <div class="span11">
               <div class="row-fluid">
               <% ids.each_with_index do |id,i| %>
-                <%= select_tag(id, options_for_select(@taxa[id]), :class => 'span3') %>
+                <%= select_tag(id, options_from_collection_for_select(@taxa[id], 'id', 'name'), :class => ['span3',id]) %>
               <% end %>
               </div>
             </div>
