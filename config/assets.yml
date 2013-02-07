@@ -50,6 +50,8 @@ javascripts:
     - public/javascripts/jquery.ba-throttle-debounce.js
   bootstrap:
     - public/javascripts/bootstrap/js/bootstrap.js
+  search:
+    - public/javascripts/search.js
 
 stylesheets:
   application:

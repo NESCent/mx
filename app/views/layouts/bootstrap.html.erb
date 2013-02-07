@@ -3,12 +3,15 @@
 <head>
 	<meta charset="utf-8" />
 	<title>MX - <%=  self.controller.controller_name.pluralize.gsub("_", " ") %></title>
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-  <%= include_javascripts :bootstrap %>
   <%= include_stylesheets :bootstrap %>
+  <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
   <%= yield :head -%>
   </head>
 <body>
 	<%= yield -%>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+  <%= include_javascripts :bootstrap %>
+  <%= include_javascripts :search %>
 </body>
 </html>
