@@ -44,13 +44,26 @@ function addButtonHandlers() {
   });
 }
 
+function updateGenusList(familyElement, genusList) {
+    // find the genus select element
+    var genusElement = $(familyElement).siblings(".genus");
+    // remove all options from the genus element
+    genusElement.find('option').remove();
+    for(var genus in genusList) {
+      var obj = genusList[genus].taxon_name;
+      console.log("name: " + obj.name + " id: " + obj.id);
+      // now make a new select option and append it
+      var optionElement = $('<option>', {value: obj.id}).text(obj.name);
+      genusElement.append(optionElement);
+    }
+}
+
 function familyChanged(element, familyId) {
   console.log("family changed to " + familyId)
   $.ajax({
-    // good candidate for the erb
-    url: "/projects/1/public/search/search_form",
+    url: "/projects/1/public/search/list_genus.json",
     data: { family_id: familyId }
-    }).done(function(data, textStatus, jqXHR) { console.log(data)});
+    }).done(function(data, textStatus, jqXHR) { updateGenusList(element, data)});
 }
 
 function addSelectionChangeListeners() {
