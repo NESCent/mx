@@ -1020,6 +1020,9 @@ Edge::Application.routes.draw do
     collections: %w{
       get index
       get search_form
+      get list_order
+      get list_family
+      get list_genus
     },
  },
 
