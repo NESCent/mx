@@ -13,6 +13,16 @@
           <%
             ids = [:htg, :order, :family, :genus]
           %>
+          <div class="row-fluid">
+            <div class="span11">
+              <div class="row-fluid">
+                <label class="span3">Higher Group</label>
+                <label class="span3">Order</label>
+                <label class="span3">Family</label>
+                <label class="span3">Genus</label>
+              </div>
+            </div>
+          </div>
           <div class="row-fluid taxon-filter-row">
             <div class="span11">
               <div class="row-fluid">
@@ -31,9 +41,9 @@
           <div class="row-fluid trait-filter-row">
             <div class="span11">
               <div class="row-fluid">
-                <%= select_tag(:trait_group, options_for_select(@trait_groups), :class => 'span4') %>
-                <%= select_tag(:trait_name, options_for_select(@trait_names), :class => 'span4') %>
-                <%= select_tag(:trait_values, options_for_select(@trait_values), :class => 'span4') %>
+                <%= select_tag(:trait_group, options_from_collection_for_select(@trait_groups, 'id', 'name'), :class => 'span4 trait_group') %>
+                <%= select_tag(:trait_name, options_from_collection_for_select(@trait_names, 'id', 'name'), :class => 'span4 trait_name') %>
+                <%= select_tag(:trait_values, options_from_collection_for_select(@trait_values, 'id','name'), :class => 'span4 trait_values') %>
               </div>
             </div>
             <div class="span1">

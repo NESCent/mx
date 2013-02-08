@@ -20,15 +20,16 @@ class Public::SearchController < ApplicationController
     # Order
     @taxa[:order] = order_taxa
     # Family
-    @taxa[:family] = family_taxa_in_order(params[:order_id])
+    @taxa[:family] = family_taxa_in_order(@taxa[:order].first)
     # Genus
-    @taxa[:genus] = genus_taxa_in_family(params[:family_id])
+    @taxa[:genus] = genus_taxa_in_family(@taxa[:family].first)
     # we need character groups (traits)
-    @trait_groups = [["Trait Group", 0], ["Group 1", 1], ["Group 2", 2]]
-    @trait_names = [["Trait Name", 0], ["gametophytic chromosome number (minimum)", 1], ["gametophytic chromosome number (mean)", 2]]
-    @trait_values = [["All Values", 0]]
+    @trait_groups = trait_groups
+    @trait_names = traits_in_group(@trait_groups.first) #this would only work for the first
+    @trait_values = trait_values_for_trait(@trait_names.first)
   end
   
+  # are any of these satisfied by the taxon names controller?
   def list_order
     @order_list = order_taxa
     render :json => @order_list
@@ -43,6 +44,22 @@ class Public::SearchController < ApplicationController
     @genus_list = genus_taxa_in_family(params[:family_id])
     render :json => @genus_list
   end
+  
+  def list_trait_groups
+    @trait_groups = trait_groups
+    render :json => @trait_groups
+  end
+  
+  def list_traits
+    @traits = traits_in_group(params[:trait_group_id])
+    render :json => @traits
+  end
+  
+  def list_trait_values
+    @trait_values = trait_values_for_trait(params[:trait_id])
+    render :json => @trait_values
+  end
+  
   
   def do_search
   end
@@ -62,7 +79,6 @@ class Public::SearchController < ApplicationController
   end
   
   def genus_taxa_in_family(family_id)
-    puts "family id: #{family_id}"
     if family_id
       return TaxonName.where(:iczn_group => 'genus', :parent_id => family_id).order(:name)
     else
@@ -70,4 +86,27 @@ class Public::SearchController < ApplicationController
     end
   end
   
+  # traits
+  def trait_groups
+    return @proj.chr_groups
+  end
+  
+  def traits_in_group(trait_group_id)
+    if trait_group_id
+      return ChrGroup.find(trait_group_id).chrs
+    else
+      return []
+    end
+  end
+  
+  def trait_values_for_trait(trait_id)
+    if trait_id
+      trait = Chr.find(trait_id)
+      return trait.chr_states
+    else
+      return []
+    end
+    
+  end
+
 end

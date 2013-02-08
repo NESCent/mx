@@ -58,17 +58,70 @@ function updateGenusList(familyElement, genusList) {
     }
 }
 
-function familyChanged(element, familyId) {
-  console.log("family changed to " + familyId)
+function updateTraitNames(traitGroupElement, traitList) {
+    // find the trait names select element
+    var traitElement = $(traitGroupElement).siblings(".trait_name");
+    // remove all options from the select
+    traitElement.find('option').remove();
+    for(var trait in traitList) {
+      var obj = traitList[trait].chr;
+      console.log("name: " + obj.name + " id: " + obj.id + " continuous: " + obj.is_continuous);
+      // now make a new select option and append it
+      var optionElement = $('<option>', {value: obj.id}).text(obj.name);
+      traitElement.append(optionElement);
+    }
+}
+
+function updateTraitValues(traitElement, valueList) {
+    // find the trait values select element
+    var traitValuesElement = $(traitElement).siblings(".trait_values");
+    // remove all options from the select
+    traitValuesElement.find('option').remove();
+    for(var traitValue in valueList) {
+      var obj = valueList[traitValue].chr_state;
+      console.log("name: " + obj.name + " id: " + obj.id + " state: " + obj.state);
+      // now make a new select option and append it
+      var optionElement = $('<option>', {value: obj.id}).text(obj.state + " - " + obj.name);
+      traitValuesElement.append(optionElement);
+    }
+}
+
+function familyChanged(familyElement, familyId) {
+  $(familyElement).siblings(".genus").find('option').remove();
   $.ajax({
     url: "/projects/1/public/search/list_genus.json",
     data: { family_id: familyId }
-    }).done(function(data, textStatus, jqXHR) { updateGenusList(element, data)});
+    }).done(function(data, textStatus, jqXHR) { updateGenusList(familyElement, data)});
+}
+
+function traitGroupChanged(traitGroupElement, traitGroupId) {
+  $(traitGroupElement).siblings(".trait_name").find('option').remove();
+  $.ajax({
+    url: "/projects/1/public/search/list_traits.json",
+    data: { trait_group_id: traitGroupId }
+    }).done(function(data, textStatus, jqXHR) { updateTraitNames(traitGroupElement, data)});
+}
+
+// when a trait is changed, update the possible values
+function traitChanged(traitElement, traitId) {
+  $(traitElement).siblings(".trait_values").find('option').remove();
+  $.ajax({
+    url: "/projects/1/public/search/list_trait_values.json",
+    data: { trait_id: traitId }
+    }).done(function(data, textstatus, jqXHR) { updateTraitValues(traitElement, data)});
 }
 
 function addSelectionChangeListeners() {
-  $('select#family').bind('change',function() {
+  // taxonomy - only observing family for now
+  $('select.family').change(function() {
     familyChanged(this,this.value);
+  });
+  // trait
+  $('select.trait_group').change(function() {
+    traitGroupChanged(this,this.value);
+  });
+  $('select.trait_name').change(function() {
+    traitChanged(this,this.value);
   });
 }
 

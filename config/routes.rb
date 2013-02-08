@@ -1021,8 +1021,10 @@ Edge::Application.routes.draw do
       get index
       get search_form
       get list_order
-      get list_family
       get list_genus
+      get list_trait_groups
+      get list_traits
+      get list_trait_values
     },
  },
 
