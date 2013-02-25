@@ -41,6 +41,9 @@ source :gemcutter
   #   gem "echoe" # !! This may need to be commented out for recent versions of passenger.
   #   config.gem 'addressable',  '2.2.4' # !! 2.2.5 will not work, uninstall from your library completely.
   #   gem 'prototype_legacy_helper', '0.0.0', :git => 'git://github.com/rails/prototype_legacy_helper.git'
+  
+  # For Tree of Sex WG Imports - NESCent/dleehr 2013-02-25
+  gem "bio-nexml", "~> 1.1.0"
 
 group :production do
 
