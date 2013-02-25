@@ -67,7 +67,7 @@ class Chr < ActiveRecord::Base
   scope :without_groups, :conditions => 'id NOT IN (SELECT chr_id FROM chr_groups_chrs)'
   scope :coded_for_otu, lambda {|*args| {:conditions => ["chrs.id IN (SELECT chr_id FROM codings WHERE otu_id = (?))", args.first.id]}}
   scope :recently_changed_by_chr_state, lambda {|*args| {:include => :chr_states, :conditions => ["(chr_states.created_on > ?) OR (chr_states.updated_on > ?)", (args.first || 2.weeks.ago), (args.first || 2.weeks.ago)] }}
-  scope :within_mx_range, lambda {|*args| {:include => :chrs_mxes, :conditions => ["chrs_mxes.position >= ? AND chrs_mxes.position <= ?", (args.first || -1), (args[1] || -1)]}} 
+	scope :within_mx_range, lambda {|*args| where("chrs_mxes.position >= ?", (args.first || -1)).where("chrs_mxes.position <= ?", (args[1] || -1)) }
   scope :not_in_matrices, :conditions => 'chrs.id NOT IN (SELECT chr_id from chrs_mxes)', :order => 'chrs.name'
 
   scope :that_are_multistate, :conditions => 'chrs.is_continuous != true AND chrs.standard_view_id is null' 
