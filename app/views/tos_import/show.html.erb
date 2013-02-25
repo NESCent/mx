@@ -1,0 +1,33 @@
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="dataset show">
+  <h2>Show Dataset</h2>
+
+  <table summary="Page detail view">
+  	<tr>
+  	  <th>Filename</th>
+  	  <td><%= @dataset.filename %></td>
+  	</tr>
+    <tr>
+      <th>Status</th>
+      <td><%= @dataset.status %></td>
+    </tr>
+    <tr>
+      <th>Project ID</th>
+      <td><%= @dataset.proj_id %></td>
+    </tr>
+    <tr>
+      <th>Uploader ID</th>
+      <td><%= @dataset.people_id %></td>
+    </tr>
+    <tr>
+      <th>Created</th>
+      <td><%= @dataset.created_at %></td>
+    </tr>
+    <tr>
+      <th>Updated</th>
+      <td><%= @dataset.updated_at %></td>
+    </tr>
+  </table>
+  
+</div>

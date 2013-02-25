@@ -1,5 +1,16 @@
 Edge::Application.routes.draw do
 
+  get "/projects/:proj_id/tos_import" => "tos_import#list"
+  get "/projects/:proj_id/tos_import/new" => "tos_import#new"
+  post "/projects/:proj_id/tos_import/create" => "tos_import#create"
+  post "/projects/:proj_id/tos_import/update" => "tos_import#update"
+  get "/projects/:proj_id/tos_import/edit" => "tos_import#edit"
+  get "/projects/:proj_id/tos_import/delete" => "tos_import#delete"
+  post "/projects/:proj_id/tos_import/destroy" => "tos_import#destroy"
+  get "/projects/:proj_id/tos_import/index" => "tos_import#index"
+  get "/projects/:proj_id/tos_import/list" => "tos_import#list"
+  get "/projects/:proj_id/tos_import/show" => "tos_import#show"
+
   root :to => "projs#index"
 
  # matrix/coding routes

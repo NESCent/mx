@@ -1,0 +1,15 @@
+<%= link_to("<< Back to List", {:action => 'list'}, :class => 'back-link') %>
+
+<div class="dataset edit">
+  <h2>Update Dataset</h2>
+  
+  <%= form_for(:dataset, :url => {:action => 'update', :id => @dataset.id }) do |f| %>
+
+  <%= render(:partial => "form", :locals => { :f => f}) %>
+  <div class="form-buttons">
+	<%= submit_tag("Update dataset") %>
+  </div>
+
+  <% end %>
+  
+</div>

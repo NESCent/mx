@@ -1,0 +1,29 @@
+<% @page_title = "Datasets" %>
+<div class="dataset list">
+	<h2>Datasets</h2>
+	
+	<%= link_to("Upload dataset", { :action => 'new' }, :class => 'action new') %>
+	
+	<table class="listing" summary="Dataset List">
+	<tr class="header">
+		<th>&nbsp;</th>
+		<th>Filename</th>
+		<th>Status</th>
+		<th>Project</th>
+		<th>Uploader</th>
+		<th>Actions</th>
+	</tr>
+	<% @datasets.each do |dataset| %>
+	<tr>
+		<td><%= dataset.filename %></td>
+		<td><%= dataset.status %></td>
+		<td><%= dataset.proj_id %></td>
+		<td><%= dataset.people_id %></td>
+		<td class="actions">
+			<%= link_to("Show", { :action => 'show', :id => dataset.id }, :class => 'action show') %>
+			<%= link_to("Edit", { :action => 'edit', :id => dataset.id }, :class => 'action edit') %>
+			<%= link_to("Delete", { :action => 'delete', :id => dataset.id }, :class => 'action delete') %>
+		</td>
+	<% end %>
+	</table>
+</div>

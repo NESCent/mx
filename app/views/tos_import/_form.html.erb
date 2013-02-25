@@ -1,0 +1,11 @@
+<%= error_messages_for(@dataset) %>
+  <table summary="Dataset detail view">
+    <tr>
+      <th><%= f.label(:filename) %></th>
+      <td><%= f.file_field(:filename) %></th>
+    </tr>
+    <tr>
+      <th><%= f.label(:status) %></th>
+      <td><%= f.text_field(:status) %></th>
+    </tr>
+  </table>
