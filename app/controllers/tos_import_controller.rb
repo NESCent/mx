@@ -8,7 +8,10 @@ class TosImportController < ApplicationController
   end
 
   def create
+    puts "Params are #{params[:dataset]}"
     @dataset = TosImportDataset.new(params[:dataset])
+    @dataset.proj_id = @proj.id
+    @dataset.people_id = session[:person].id
     if @dataset.save
       flash[:notice] = 'Dataset uploaded successsfully'
       redirect_to(:action => 'list')
