@@ -1,4 +1,4 @@
-class TosImportDataset < ActiveRecord::Base
+class TosUploadDataset < ActiveRecord::Base
   belongs_to :proj
   belongs_to :people, :class_name => "Person"
   

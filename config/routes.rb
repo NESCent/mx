@@ -1,15 +1,15 @@
 Edge::Application.routes.draw do
 
-  get "/projects/:proj_id/tos_import" => "tos_import#list"
-  get "/projects/:proj_id/tos_import/new" => "tos_import#new"
-  post "/projects/:proj_id/tos_import/create" => "tos_import#create"
-  post "/projects/:proj_id/tos_import/update" => "tos_import#update"
-  get "/projects/:proj_id/tos_import/edit" => "tos_import#edit"
-  get "/projects/:proj_id/tos_import/delete" => "tos_import#delete"
-  post "/projects/:proj_id/tos_import/destroy" => "tos_import#destroy"
-  get "/projects/:proj_id/tos_import/index" => "tos_import#index"
-  get "/projects/:proj_id/tos_import/list" => "tos_import#list"
-  get "/projects/:proj_id/tos_import/show" => "tos_import#show"
+  get "/projects/:proj_id/tos_upload" => "tos_upload#list"
+  get "/projects/:proj_id/tos_upload/new" => "tos_upload#new"
+  post "/projects/:proj_id/tos_upload/create" => "tos_upload#create"
+  post "/projects/:proj_id/tos_upload/update" => "tos_upload#update"
+  get "/projects/:proj_id/tos_upload/edit" => "tos_upload#edit"
+  get "/projects/:proj_id/tos_upload/delete" => "tos_upload#delete"
+  post "/projects/:proj_id/tos_upload/destroy" => "tos_upload#destroy"
+  get "/projects/:proj_id/tos_upload/index" => "tos_upload#index"
+  get "/projects/:proj_id/tos_upload/list" => "tos_upload#list"
+  get "/projects/:proj_id/tos_upload/show" => "tos_upload#show"
 
   root :to => "projs#index"
 

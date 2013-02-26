@@ -1,15 +1,15 @@
-class TosImportController < ApplicationController
+class TosUploadController < ApplicationController
   layout 'minimal'
   # before_filter make sure user is logged in and has access to this project
   # Looks like applicationController takes care of login
 
   def new
-    @dataset = TosImportDataset.new
+    @dataset = TosUploadDataset.new
   end
 
   def create
     puts "Params are #{params[:dataset]}"
-    @dataset = TosImportDataset.new(params[:dataset])
+    @dataset = TosUploadDataset.new(params[:dataset])
     @dataset.proj_id = @proj.id
     @dataset.people_id = session[:person].id
     if @dataset.save
@@ -21,7 +21,7 @@ class TosImportController < ApplicationController
   end
 
   def update
-    @dataset = TosImportDataset.find(params[:id])
+    @dataset = TosUploadDataset.find(params[:id])
     if @dataset.update_attributes(params[:dataset])
       flash[:notice] = 'Dataset updated successfully'
       redirect_to(:action => 'show', :id => @dataset.id)
@@ -31,16 +31,16 @@ class TosImportController < ApplicationController
   end
 
   def edit
-    @dataset = TosImportDataset.find(params[:id])
+    @dataset = TosUploadDataset.find(params[:id])
   end
 
   def delete
-    @dataset = TosImportDataset.find(params[:id])
+    @dataset = TosUploadDataset.find(params[:id])
   end
 
   def destroy
     # accepts the delete form
-    dataset = TosImportDataset.find(params[:id])
+    dataset = TosUploadDataset.find(params[:id])
     # Need to delete the CSV file here?
     dataset.destroy
     flash[:notice] = 'Dataset destroyed successfully'
@@ -53,11 +53,11 @@ class TosImportController < ApplicationController
   end
   
   def list
-    @datasets = TosImportDataset.order('created_at DESC')
+    @datasets = TosUploadDataset.order('created_at DESC')
   end
 
   def show
-    @dataset = TosImportDataset.find(params[:id])
+    @dataset = TosUploadDataset.find(params[:id])
   end
 
 end

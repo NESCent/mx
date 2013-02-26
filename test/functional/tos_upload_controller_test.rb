@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TosImportControllerTest < ActionController::TestCase
+class TosUploadControllerTest < ActionController::TestCase
   test "should get new" do
     get :new
     assert_response :success
