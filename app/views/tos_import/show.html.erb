@@ -9,16 +9,20 @@
   	  <td><%= @dataset.filename %></td>
   	</tr>
     <tr>
+      <th>Full path</th>
+      <td><%= @dataset.filepath %></td>
+    </tr>
+    <tr>
       <th>Status</th>
       <td><%= @dataset.status %></td>
     </tr>
     <tr>
       <th>Project ID</th>
-      <td><%= @dataset.proj_id %></td>
+      <td><%= @dataset.proj.name %></td>
     </tr>
     <tr>
       <th>Uploader ID</th>
-      <td><%= @dataset.people_id %></td>
+      <td><%= @dataset.people.name %></td>
     </tr>
     <tr>
       <th>Created</th>

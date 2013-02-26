@@ -6,7 +6,6 @@
 	
 	<table class="listing" summary="Dataset List">
 	<tr class="header">
-		<th>&nbsp;</th>
 		<th>Filename</th>
 		<th>Status</th>
 		<th>Project</th>
@@ -17,8 +16,8 @@
 	<tr>
 		<td><%= dataset.filename %></td>
 		<td><%= dataset.status %></td>
-		<td><%= dataset.proj_id %></td>
-		<td><%= dataset.people_id %></td>
+		<td><%= dataset.proj.name %></td>
+		<td><%= dataset.people.name%></td>
 		<td class="actions">
 			<%= link_to("Show", { :action => 'show', :id => dataset.id }, :class => 'action show') %>
 			<%= link_to("Edit", { :action => 'edit', :id => dataset.id }, :class => 'action edit') %>
