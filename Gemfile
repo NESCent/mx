@@ -11,7 +11,7 @@ source :gemcutter
   gem "bio",  '1.4.1'
   gem "mysql2", '< 0.3'
   gem "rake", "0.9.2.2"
-  gem "ruby-debug19",  '0.11.6'
+#  gem "ruby-debug19",  '0.11.6' unless ENV["RM_INFO"]
   gem "ruby-graphviz", '0.9.21', :require => "graphviz"
   gem "win32-open3-19", :platforms => :mingw
   gem 'alchemist',  '0.1.2.1'

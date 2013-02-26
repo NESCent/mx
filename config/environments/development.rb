@@ -1,6 +1,3 @@
-require 'ruby-debug'
-Debugger.start_remote if ENV['RDEBUG_START_REMOTE']
-
 Edge::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
