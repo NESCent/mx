@@ -1,5 +1,13 @@
 Edge::Application.routes.draw do
 
+  get "/projects/:proj_id/tos_import/import" => "tos_import#import"
+  post "/projects/:proj_id/tos_import/create" => "tos_import#create"
+
+  get "tos_import/show"
+  get "tos_import/index"
+  get "tos_import/cancel"
+  get "tos_import/destroy"
+
   get "/projects/:proj_id/tos_upload" => "tos_upload#list"
   get "/projects/:proj_id/tos_upload/new" => "tos_upload#new"
   post "/projects/:proj_id/tos_upload/create" => "tos_upload#create"

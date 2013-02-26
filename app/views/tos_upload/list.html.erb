@@ -22,6 +22,7 @@
 			<%= link_to("Show", { :action => 'show', :id => dataset.id }, :class => 'action show') %>
 			<%= link_to("Edit", { :action => 'edit', :id => dataset.id }, :class => 'action edit') %>
 			<%= link_to("Delete", { :action => 'delete', :id => dataset.id }, :class => 'action delete') %>
+            <%= link_to("Import", { :controller => 'tos_import', :action => 'import', :dataset_id => dataset.id }, :class => 'action import') %>
 		</td>
 	<% end %>
 	</table>

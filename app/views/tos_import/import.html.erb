@@ -1,0 +1,11 @@
+<div class="import new">
+  <h2>Import dataset: <%= @dataset.filename %></h2>
+
+  <%= form_for(:dataset, :url => {:action => 'create'}) do |f| %>
+      <%= hidden_field_tag :dataset_id, @dataset.id %>
+      <div class="form-buttons">
+        <%= submit_tag("Import dataset") %>
+      </div>
+  <% end %>
+
+</div>

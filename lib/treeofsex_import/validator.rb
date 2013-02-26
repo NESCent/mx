@@ -59,10 +59,12 @@ module TreeOfSexImport
         read_column_headers
         # read the row data
         read_row_data
+        return true
       rescue Exception => e
         puts "=== Validation failed: #{e.message}"
         @datasets = []
         @chr_headers = {}
+        return false
       end
     end
   
