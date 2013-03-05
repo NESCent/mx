@@ -45,3 +45,6 @@ Icon?
 /vendor/bundle
 /log/*
 /tmp/*
+
+public/uploads/*
+
