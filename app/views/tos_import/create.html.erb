@@ -9,4 +9,24 @@
     </div>
 <% end %>
 
-<div>Attempted to import </div>
+<div>
+  <h2>Validation results:</h2>
+  <ul>
+    <% @validator_messages.each do |m|  %>
+      <li><%= m %></li>
+    <% end %>
+  </ul>
+</div>
+<div>
+  <h2>Import results:</h2>
+  <ul>
+    <% @import_chrs_messages.each do |m|  %>
+      <li><%= m %></li>
+    <% end %>
+  </ul>
+  <ul>
+    <% @import_datasets_messages.each do |m|  %>
+      <li><%= m %></li>
+    <% end %>
+  </ul>
+</div>
