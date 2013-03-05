@@ -20,6 +20,8 @@ end
 module TreeOfSexImport
   class Validator
     attr_reader :datasets, :chr_headers
+    attr_accessor :quantitative_header_start, :quantitative_header_end
+    attr_accessor :qualitative_header_start, :qualitative_header_end
     # Constant Header column names, required
     TAXON_HEADERS = ["Higher taxonomic group", "Order", "Family", "Genus", "species"]
     TAXON_SYMBOLS = [:higher_taxonomic_group, :order, :family, :genus, :species]
@@ -30,29 +32,25 @@ module TreeOfSexImport
     # must know the first/last quantitative character header
     # and the first/last qualitative character header
   
-    @@quantitative_header_start = "gametophytic chromosome number (minimum)"
-    @@quantitative_header_end = "sporophytic chromosome number (mean)"
-    @@qualitative_header_start = "Hybrid (no, yes)"
-    @@qualitative_header_end = "molecular basis (dosage, Y dominant, W dominant, DM-W)"
-
     # Headers for source columns must consist of the prefix below, followed by a 
     # character name (quantitative or qualitative)
     SOURCE_PREFIX = "source: "
   
     def initialize(path=nil)
       @filepath = path
+      @messages = []
       if file_usable?
-        puts "=== Loading CSV file #{path}"
+        @messages << "=== Loading CSV file #{path}"
         @csvfile = nil
       else
-        puts "=== Unable to load CSV file #{path}"
+        @messages << "=== Unable to load CSV file #{path}"
         @filepath = nil
       end
     end
   
-    def read
+    def validate
       begin
-        puts "=== Reading CSV file #{@filepath}"
+        @messages << "=== Reading CSV file #{@filepath}"
         read_csv_file
         raise "Unable to read file" if @csvfile.nil?
         # read and check the column headers
@@ -61,13 +59,13 @@ module TreeOfSexImport
         read_row_data
         return true
       rescue Exception => e
-        puts "=== Validation failed: #{e.message}"
+        @messages << "=== Validation failed: #{e.message}"
         @datasets = []
         @chr_headers = {}
         return false
       end
     end
-  
+    
     private
   
     def read_csv_file
@@ -103,34 +101,34 @@ module TreeOfSexImport
       headers = @csvfile.headers()
       raise "Unable to read headers from csv" unless headers
       if (TAXON_HEADERS-headers).empty?
-        puts "Taxon Headers are valid"
+        @messages << "Taxon Headers are valid"
       else
         raise "Missing proper taxon headers"
       end
     end
   
-    # Checks if headers marked by @@quantitative_header_start - @@quantitative_header_end
+    # Checks if headers marked by quantitative_header_start - quantitative_header_end
     # are valid quantitative headers.  
     def read_quantitative_chr_headers
       headers = @csvfile.headers()
-      first = headers.index(@@quantitative_header_start)
-      last = headers.index(@@quantitative_header_end)
-      raise "Did not find first designated quantitative header: #{@@quantitative_header_start}" if first.nil?
-      raise "Did not find last designated quantitative header: #{@@quantitative_header_end}" if last.nil?
+      first = headers.index(@quantitative_header_start)
+      last = headers.index(@quantitative_header_end)
+      raise "Did not find first designated quantitative header: #{@quantitative_header_start}" if first.nil?
+      raise "Did not find last designated quantitative header: #{@quantitative_header_end}" if last.nil?
       quantitative_chr_range = Range.new(first, last)
       @chr_headers[:quantitative] = headers[quantitative_chr_range]
       raise "Quantitative headers are not unique" if @chr_headers[:quantitative].uniq.length != @chr_headers[:quantitative].length
-      puts "Quantitative headers are valid"
+      @messages << "Quantitative headers are valid"
     end
   
     # checks for valid qualitative character headers
     # 
     def read_qualitative_chr_headers
       headers = @csvfile.headers()
-      first = headers.index(@@qualitative_header_start)
-      last = headers.index(@@qualitative_header_end)
-      raise "Did not find first designated qualitative header: #{@@qualitative_header_start}" if first.nil?
-      raise "Did not find last designated qualitative header: #{@@qualitative_header_end}" if last.nil?
+      first = headers.index(@qualitative_header_start)
+      last = headers.index(@qualitative_header_end)
+      raise "Did not find first designated qualitative header: #{@qualitative_header_start}" if first.nil?
+      raise "Did not find last designated qualitative header: #{@qualitative_header_end}" if last.nil?
     
       qualitative_chr_range = Range.new(first, last)
       # found qualitative headers, now make sure each contains choices
@@ -153,22 +151,22 @@ module TreeOfSexImport
   
     def check_entry_email_header
       raise "Missing #{ENTRY_EMAIL_HEADER} header" unless @csvfile.headers.include?(ENTRY_EMAIL_HEADER)
-      puts "#{ENTRY_EMAIL_HEADER} header valid"
+      @messages << "#{ENTRY_EMAIL_HEADER} header valid"
     end
   
     def check_notes_comments_header
       raise "Missing #{NOTES_COMMENTS_HEADER} header" unless @csvfile.headers.include?(NOTES_COMMENTS_HEADER)
-      puts "#{NOTES_COMMENTS_HEADER} header valid"
+      @messages << "#{NOTES_COMMENTS_HEADER} header valid"
     end
   
     # Checks if a source header exists for each quantitative header
     # @chr_headers[:quantitative] must be populated
     def read_quantitative_chr_source_headers
       headers = @csvfile.headers()
-      first = headers.index("#{SOURCE_PREFIX}#{@@quantitative_header_start}")
-      last = headers.index("#{SOURCE_PREFIX}#{@@quantitative_header_end}")
-      raise "Did not find first designated quantitative source header: '#{SOURCE_PREFIX}#{@@quantitative_header_start}'" if first.nil?
-      raise "Did not find last designated quantitative source header: '#{SOURCE_PREFIX}#{@@quantitative_header_end}'" if last.nil?
+      first = headers.index("#{SOURCE_PREFIX}#{@quantitative_header_start}")
+      last = headers.index("#{SOURCE_PREFIX}#{@quantitative_header_end}")
+      raise "Did not find first designated quantitative source header: '#{SOURCE_PREFIX}#{@quantitative_header_start}'" if first.nil?
+      raise "Did not find last designated quantitative source header: '#{SOURCE_PREFIX}#{@quantitative_header_end}'" if last.nil?
     
       quantitative_chr_source_range = Range.new(first, last)
       @quantitative_chr_source_headers = headers[quantitative_chr_source_range]
@@ -186,15 +184,15 @@ module TreeOfSexImport
         raise "Found extra quantitative source headers: #{extra_source_headers}"
       end
 
-      puts "Quantitative source headers are valid"
+      @messages << "Quantitative source headers are valid"
     end
   
     def read_qualitative_chr_source_headers
       headers = @csvfile.headers()
-      first = headers.index("#{SOURCE_PREFIX}#{@@qualitative_header_start}")
-      last = headers.index("#{SOURCE_PREFIX}#{@@qualitative_header_end}")
-      raise "Did not find first designated qualitative source header: '#{SOURCE_PREFIX}#{@@qualitative_header_start}'" if first.nil?
-      raise "Did not find last designated qualitative source header: '#{SOURCE_PREFIX}#{@@qualitative_header_end}'" if last.nil?
+      first = headers.index("#{SOURCE_PREFIX}#{@qualitative_header_start}")
+      last = headers.index("#{SOURCE_PREFIX}#{@qualitative_header_end}")
+      raise "Did not find first designated qualitative source header: '#{SOURCE_PREFIX}#{@qualitative_header_start}'" if first.nil?
+      raise "Did not find last designated qualitative source header: '#{SOURCE_PREFIX}#{@qualitative_header_end}'" if last.nil?
 
       @qualitative_chr_source_range = Range.new(first, last)
       # Remember, for qualitative headers, the possible choices are in the header
@@ -214,12 +212,12 @@ module TreeOfSexImport
         raise "Found extra quantitative source headers: #{extra_source_headers}"
       end
 
-      puts "Qualitative source headers are valid"
+      @messages << "Qualitative source headers are valid"
     end
     
     def read_row_data
       @datasets = []
-      puts "=== Reading row data"
+      @messages << "=== Reading row data"
       # map the raw names to the output names for looking up 
       qualitative_chr_header_map = {}
       @chr_headers[:qualitative].each do |h|
@@ -230,13 +228,15 @@ module TreeOfSexImport
         dataset = {}
         lineno = i + 2 # i is zero-indexed and the first line is headers
         # Datasets have
-        # 1. taxons
+        # 1. taxa
         taxon_hash = row.to_hash.select{|k,v| TAXON_HEADERS.include?(k)}
         # Need to make sure symbols are ordered the same way
         dataset[:taxon] = Hash[[TAXON_SYMBOLS, taxon_hash.values].transpose]
         # Need to symbolicate taxon headers 
         # Species names have rules for -1, -2
         # How are these actually implemented?
+        
+        # species author, infraspecific?
 
         # 2. quantitative chars
         # Each item must be a number or nil
