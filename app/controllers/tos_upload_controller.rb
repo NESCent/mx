@@ -53,7 +53,7 @@ class TosUploadController < ApplicationController
   end
   
   def list
-    @datasets = TosUploadDataset.order('created_at DESC')
+    @datasets = TosUploadDataset.where(:proj_id =>  @proj.id).order('created_at DESC')
   end
 
   def show
